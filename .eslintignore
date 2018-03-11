@@ -1,0 +1,3 @@
+**/*.snap
+../express-server/__tests__/**
+src/__tests__/**
