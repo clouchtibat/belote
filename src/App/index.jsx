@@ -122,12 +122,26 @@ export default class AppComponent extends Component {
         });
     }
 
+    @autobind
+    toggleSort() {
+        this.setState({
+            ...this.state,
+            sortedByScore: !this.state.sortedByScore,
+        });
+    }
+
     render() {
-        const { chooseTeams, setTeams, toggleStay, createArray, setTableTurn, setWon, setLose } = this;
-        const { teams, table } = this.state;
+        const { chooseTeams, setTeams, toggleStay, createArray, setTableTurn, setWon, setLose, toggleSort } = this;
+        const { teams, table, sortedByScore } = this.state;
 
         console.log('render');
         console.log(teams);
+
+        const sortedTeams = teams.slice();
+        if (sortedByScore) {
+            sortedTeams.sort((a, b) => getTotal(a) - getTotal(b));
+            sortedTeams.reverse();
+        }
 
         return (
             <div className="app">
@@ -146,38 +160,40 @@ export default class AppComponent extends Component {
                     </div>
                 )}
                 {table && (
-                    <table>
-                        <thead>
-                            <tr><th>Equipe</th><th>Tour de table</th>
-                                <th>Partie 1</th>
-                                <th>Partie 2</th>
-                                <th>Partie 3</th>
-                                <th>Partie 4</th>
-                                <th>Total points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {teams.map(team => (
-                                <tr key={team.id}>
-                                    <td>{team.name}</td>
-                                    <td><input type="text" data-id={team.id} value={team.tableTurn} onChange={setTableTurn} /></td>
-                                    {team.sets.map((set, index) => {
-                                        const key = `${team.id}_${index}`;
-                                        return (
-                                            <td key={key}>
-                                                <input type="radio" data-id={team.id} data-set={index} name={key} onChange={setWon} />
-                                                <input type="radio" data-id={team.id} data-set={index} name={key} onChange={setLose} />
-                                            </td>
-                                        );
-                                    })}
-                                    <td>{getWonSets(team)}</td>
-                                    <td>{getTotal(team)}</td>
+                    <div>
+                        <button onClick={toggleSort}>Trier par score</button>
+                        <table>
+                            <thead>
+                                <tr><th>Equipe</th><th>Tour de table</th>
+                                    <th>Partie 1</th>
+                                    <th>Partie 2</th>
+                                    <th>Partie 3</th>
+                                    <th>Partie 4</th>
+                                    <th>Total points</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {sortedTeams.map(team => (
+                                    <tr key={team.id}>
+                                        <td>{team.name}</td>
+                                        <td><input type="text" data-id={team.id} value={team.tableTurn} onChange={setTableTurn} /></td>
+                                        {team.sets.map((set, index) => {
+                                            const key = `${team.id}_${index}`;
+                                            return (
+                                                <td key={key}>
+                                                    <input type="radio" data-id={team.id} data-set={index} name={key} onChange={setWon} />
+                                                    <input type="radio" data-id={team.id} data-set={index} name={key} onChange={setLose} />
+                                                </td>
+                                            );
+                                        })}
+                                        <td>{getWonSets(team)}</td>
+                                        <td>{getTotal(team)}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
 
-
+                    </div>
                 )}
             </div>
 
