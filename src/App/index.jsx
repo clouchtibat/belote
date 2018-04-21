@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
 import TeamsNumber from './TeamsNumber';
+import TableSorter from './TableSorter';
 import Centerer from './Centerer';
 
 import './app.scss';
@@ -170,24 +171,9 @@ export default class AppComponent extends Component {
             sortedTeams.reverse();
         }
 
-        return (
-            <div className="app">
-                <button className="button reset" onClick={reset}>Réinitialiser</button>
-                {!type && (
-                    <div className="choose-type">
-                        <button data-type="belotte" onClick={setType}>Belotte</button>
-                        <button data-type="manille" onClick={setType}>Manille</button>
-                    </div>
-                )}
-                {type && (
-                    <div>
-                        <h1 className="title">{type}</h1>
-                        {!teams && (
-                            <TeamsNumber onSetTeamsNumber={setTeamsNumber} />
-                        )}
-                        {(teams && !table) && (
-                            <Centerer className="teams-settings">
-                                <h1>Choisir les équipes qui ne vont pas changer de table:</h1>
+        /*
+
+                                        <h1>Choisir les équipes qui ne vont pas changer de table:</h1>
                                 <div className="teams">
                                     {teams.map((team, index) => (
                                         <button
@@ -199,6 +185,27 @@ export default class AppComponent extends Component {
                                     ))}
                                 </div>
                                 <button className="button generate" onClick={createArray}>Générer tableau</button>
+
+        */
+
+        return (
+            <div className="app">
+                <button className="button reset" onClick={reset}>Réinitialiser</button>
+                {!type && (
+                    <Centerer className="choose-type">
+                        <button className="button" data-type="belotte" onClick={setType}>Belotte</button>
+                        <button className="button" data-type="manille" onClick={setType}>Manille</button>
+                    </Centerer>
+                )}
+                {type && (
+                    <div>
+                        <h1 className="title">{type}</h1>
+                        {!teams && (
+                            <TeamsNumber onSetTeamsNumber={setTeamsNumber} />
+                        )}
+                        {(teams && !table) && (
+                            <Centerer className="teams-settings">
+                                <TableSorter teams={teams} />
                             </Centerer>
                         )}
                         {table && (

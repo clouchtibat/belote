@@ -43,6 +43,15 @@
         text-align: center;
     }
 
+    .choose-type {
+        .button {
+            height: 41px;
+            font-size: 25px;
+            padding: 0 25px;
+            margin:0 20px;
+        }
+    }
+
     .teams-number {
         input[type=number] {
             height: 35px;
