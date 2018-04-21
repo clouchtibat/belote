@@ -1,5 +1,153 @@
 .app {
-    .is-staying {
-        background: red;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+
+    .centerer {
+        display: table;
+        width: 100%;
+        height: 100%;
+
+        .centered {
+            width: 100%;
+            height: 100%;
+            display: table-cell;
+            vertical-align: middle;
+            text-align: center;
+        }
     }
+
+    .button {
+        background: white;
+        border: 1px solid grey;
+        cursor: pointer;
+        transition: all .2s;
+
+        &:hover {
+            background: lighten(lightblue, 15);
+        }
+
+        &.selected {
+            background: yellowgreen;
+        }
+    }
+
+    .reset {
+        margin: 10px;
+    }
+
+    .teams-number {
+        input[type=number] {
+            height: 35px;
+            font-size: 25px;
+            margin: 0 15px 0 0;
+            width: 60px;
+        }
+
+        .button {
+            height: 41px;
+            font-size: 25px;
+            padding: 0 25px;
+        }
+    }
+
+    .teams-settings {
+        height: calc(100% - 40px);
+
+        .teams {
+            padding: 20px;
+            width: 50%;
+            display: inline-block;
+
+            .button {
+                width: 35px;
+                height: 35px;
+                margin: 0 10px 10px 0;
+            }
+        }
+
+        .generate {
+            display: block;
+            margin: 0 auto;
+            height: 45px;
+            width: 50%;
+            font-size: 20px;
+        }
+    }
+
+    .score-table  {
+        padding: 0 20px 20px;
+
+        .sort-rank {
+            width: 30%;
+            display: block;
+            margin: 0 auto 20px;
+            height: 35px;
+            font-size: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+
+            td, th {
+                text-align: center;
+                border: 1px solid lightblue;
+                padding: 5px;
+                border-collapse: collapse;
+
+                &.table-turn {
+                    padding: 0;
+
+                    input {
+                        width: calc(100% - 12px);
+                        height: 45px;
+                        border: 0;
+                        padding: 0 5px;
+                        font-size: 20px;
+                    }
+                }
+
+                &.set {
+                    font-size:12px;
+
+                    &.won {
+                        background: yellowgreen;
+                    }
+
+                    &.lost {
+                        background: tomato;
+                    }
+
+                    .button {
+                        transition: all .2s;
+                        opacity: 0;
+                        font-size: 12px;
+                        padding: 5px;
+
+                        &:first-child {
+                            margin: 0 5px 0 0;
+                        }
+                    }
+
+                    &:hover {
+                        button {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+
+            td {
+                height: 35px;
+                font-size: 20px;
+            }
+
+            th {
+                padding: 10px 5px;
+            }
+        }
+    }
+
+
 }

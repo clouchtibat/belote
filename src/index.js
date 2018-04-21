@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 
+import './index.css';
+
 // if (process.env.NODE_ENV !== 'production') {
 //     // eslint-disable-next-line no-unused-vars,react/no-deprecated
 //     let createClass = React.createClass;

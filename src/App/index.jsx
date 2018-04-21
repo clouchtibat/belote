@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import autobind from 'autobind-decorator';
 import classNames from 'classnames';
-import mockState from './mockState';
+import TeamsNumber from './TeamsNumber';
+import Centerer from './Centerer';
 
 import './app.scss';
 
@@ -16,61 +17,33 @@ export function getTotal(team) {
 export default class AppComponent extends Component {
     constructor() {
         super();
-        this.state = mockState;
-    }
 
+        const tmp = localStorage.getItem('state');
+        console.log('component constructor');
+        console.log(tmp);
 
-    @autobind
-    setTeams(e) {
-        this.setState({
-            ...this.state,
-            teamsNumber: parseInt(e.target.value, 10),
-        });
-    }
+        this.state = JSON.parse(tmp);
 
-    @autobind
-    toggleStay(index) {
-        const teams = this.state.teams.slice();
-        teams[index] = {
-            ...teams[index],
-            isStaying: !teams[index].isStaying,
+        this.originalSetState = this.setState;
+
+        this.setState = (state) => {
+            console.log('set state');
+            console.log(state);
+            this.originalSetState(state);
+            localStorage.setItem('state', JSON.stringify(state));
         };
-
-        this.setState({
-            ...this.state,
-            teams,
-        });
     }
 
-
     @autobind
-    chooseTeams(e) {
-        console.log('choose teams');
-        e.preventDefault();
-
+    setTeamsNumber(teamsNumber) {
         const teams = [];
-        for (let i = 0; i < this.state.teamsNumber; i++) {
+        for (let i = 0; i < teamsNumber; i++) {
             teams.push({ id: `t${i}`, name: i + 1, tableTurn: 0, sets: new Array(4).fill('x') });
         }
 
         this.setState({
             ...this.state,
             teams,
-        });
-    }
-
-    @autobind
-    createArray() {
-        console.log('create array');
-
-        console.log(this.state);
-        console.log(JSON.stringify(this.state, 0, 4));
-
-        this.setState({
-            ...this.state,
-            table: new Array(this.state.teamsNumber).fill({
-                test: 'test',
-            }),
         });
     }
 
@@ -123,6 +96,20 @@ export default class AppComponent extends Component {
     }
 
     @autobind
+    toggleStay(index) {
+        const teams = this.state.teams.slice();
+        teams[index] = {
+            ...teams[index],
+            isStaying: !teams[index].isStaying,
+        };
+
+        this.setState({
+            ...this.state,
+            teams,
+        });
+    }
+
+    @autobind
     toggleSort() {
         this.setState({
             ...this.state,
@@ -130,45 +117,108 @@ export default class AppComponent extends Component {
         });
     }
 
+    @autobind
+    createArray() {
+        console.log('create array');
+
+        console.log(this.state);
+        console.log(JSON.stringify(this.state, 0, 4));
+
+        this.setState({
+            ...this.state,
+            table: new Array(this.state.teamsNumber).fill({
+                test: 'test',
+            }),
+        });
+    }
+
+    @autobind
+    reset() {
+        if (confirm('Réinitialiser partie?')) { //eslint-disable-line
+            this.setState({
+                teams: undefined,
+                table: undefined,
+            });
+        }
+    }
+
     render() {
-        const { chooseTeams, setTeams, toggleStay, createArray, setTableTurn, setWon, setLose, toggleSort } = this;
+        const { setTeamsNumber, toggleStay, createArray,
+            setTableTurn, setWon, setLose, toggleSort, reset } = this;
         const { teams, table, sortedByScore } = this.state;
 
         console.log('render');
         console.log(teams);
 
-        const sortedTeams = teams.slice();
+        const sortedTeams = (teams || []).slice();
         if (sortedByScore) {
             sortedTeams.sort((a, b) => getTotal(a) - getTotal(b));
             sortedTeams.reverse();
         }
 
+        /*
+                                                    <span>
+
+                                                        <input
+                                                            type="radio"
+                                                            data-id={team.id}
+                                                            data-set={index}
+                                                            name={key}
+                                                            onChange={setWon}
+                                                            checked={isWon}
+                                                        />Gagné
+                                                    </span>
+                                                    <span>
+                                                        <input
+                                                            type="radio"
+                                                            data-id={team.id}
+                                                            data-set={index}
+                                                            name={key}
+                                                            onChange={setLose}
+                                                            checked={isLost}
+                                                        />Perdu
+                                                    </span>
+
+        */
+
+
         return (
             <div className="app">
+                <button className="button reset" onClick={reset}>Réinitialiser</button>
                 {!teams && (
-                    <form onSubmit={chooseTeams}>
-                        <input type="text" name="teams" onChange={setTeams} />
-                        <input type="submit" />
-                    </form>
+                    <TeamsNumber onSetTeamsNumber={setTeamsNumber} />
                 )}
-                {teams && (
-                    <div>
-                        {teams.map((team, index) => (
-                            <button className={classNames({ 'is-staying': team.isStaying })} key={`t${index}`} onClick={() => { toggleStay(index); }}>{index + 1}</button>
-                        ))}
-                        <button onClick={createArray}>Générer tableau</button>
-                    </div>
+                {(teams && !table) && (
+                    <Centerer className="teams-settings">
+                        <h1>Choisir les équipes qui ne vont pas changer de table:</h1>
+                        <div className="teams">
+                            {teams.map((team, index) => (
+                                <button
+                                    className={classNames('button', { selected: team.isStaying })}
+                                    key={team.id}
+                                    onClick={() => { toggleStay(index); }}
+                                >{index + 1}
+                                </button>
+                            ))}
+                        </div>
+                        <button className="button generate" onClick={createArray}>Générer tableau</button>
+                    </Centerer>
                 )}
                 {table && (
-                    <div>
-                        <button onClick={toggleSort}>Trier par score</button>
-                        <table>
+                    <div className="score-table">
+                        <button
+                            className={classNames('button sort-rank', { selected: sortedByScore })}
+                            onClick={toggleSort}
+                        >Trier par score
+                        </button>
+                        <table className="table">
                             <thead>
                                 <tr><th>Equipe</th><th>Tour de table</th>
                                     <th>Partie 1</th>
                                     <th>Partie 2</th>
                                     <th>Partie 3</th>
                                     <th>Partie 4</th>
+                                    <th>Parties gagnées</th>
                                     <th>Total points</th>
                                 </tr>
                             </thead>
@@ -176,13 +226,27 @@ export default class AppComponent extends Component {
                                 {sortedTeams.map(team => (
                                     <tr key={team.id}>
                                         <td>{team.name}</td>
-                                        <td><input type="text" data-id={team.id} value={team.tableTurn} onChange={setTableTurn} /></td>
+                                        <td className="table-turn"><input type="text" data-id={team.id} value={team.tableTurn} onChange={setTableTurn} /></td>
                                         {team.sets.map((set, index) => {
                                             const key = `${team.id}_${index}`;
+                                            const isWon = set === 'w';
+                                            const isLost = set === 'l';
                                             return (
-                                                <td key={key}>
-                                                    <input type="radio" data-id={team.id} data-set={index} name={key} onChange={setWon} />
-                                                    <input type="radio" data-id={team.id} data-set={index} name={key} onChange={setLose} />
+                                                <td key={key} className={classNames('set', { won: isWon, lost: isLost })}>
+                                                    <button
+                                                        className="button status"
+                                                        data-id={team.id}
+                                                        data-set={index}
+                                                        onClick={setWon}
+                                                    >Gagné
+                                                    </button>
+                                                    <button
+                                                        className="button status"
+                                                        data-id={team.id}
+                                                        data-set={index}
+                                                        onClick={setLose}
+                                                    >Perdu
+                                                    </button>
                                                 </td>
                                             );
                                         })}
