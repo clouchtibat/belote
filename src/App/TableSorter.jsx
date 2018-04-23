@@ -28,13 +28,7 @@ export default class TableSorter extends Component {
     }
 
     componentWillMount() {
-        const { teams } = this.props;
-        const { tables, remainingTeam } = createTables(teams);
-        this.setState({
-            ...this.state,
-            tables,
-            remainingTeam,
-        });
+        this.redoTables();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -92,8 +86,27 @@ export default class TableSorter extends Component {
         });
     }
 
+    @autobind
+    redoTables() {
+        console.log('rddo tables');
+        const { teams } = this.props;
+        const { tables, remainingTeam } = createTables(teams);
+        this.setState({
+            ...this.state,
+            tables,
+            remainingTeam,
+        });
+    }
+
+    @autobind
+    setTables() {
+        console.log('set tables');
+        const { onSetTables } = this.props;
+        onSetTables(this.state.tables);
+    }
+
     render() {
-        const { reverse, generateRounds } = this;
+        const { reverse, generateRounds, redoTables, setTables } = this;
         const { tables } = this.state;
         const title = 'Tirage au sort';
 
@@ -103,8 +116,17 @@ export default class TableSorter extends Component {
 
         return (
             <Centerer className="table-sorter">
-                <h1>{title}</h1>
+                <h1>{title} <button className="button" onClick={redoTables}>Refaire le tirage</button></h1>
                 <table className="table">
+                    <thead>
+                        <tr>
+                            <td>Table</td>
+                            <td>Partie 1</td>
+                            <td>Partie 2</td>
+                            <td>Partie 3</td>
+                            <td>Partie 4</td>
+                        </tr>
+                    </thead>
                     <tbody>
                         {tables.map(table => (
                             <tr key={table.id}>
@@ -113,13 +135,11 @@ export default class TableSorter extends Component {
                                     <td>
                                         {`${round[0].id} / ${round[1].id}`}
                                         {!index && (
-                                            <button
-                                                className="button reverse"
+                                            <i
+                                                className="button reverse ti-control-shuffle"
                                                 data-id={table.id}
                                                 onClick={reverse}
-                                            >
-                                                <i className="ti-control-shuffle" />
-                                            </button>
+                                            />
                                         )}
                                     </td>
                                 ))}
@@ -129,6 +149,7 @@ export default class TableSorter extends Component {
                     </tbody>
                 </table>
                 <button className="button" onClick={generateRounds}>Créer les parties</button>
+                <button className="button" onClick={setTables}>Terminer</button>
             </Centerer>
         );
     }
@@ -136,5 +157,6 @@ export default class TableSorter extends Component {
 
 TableSorter.propTypes = {
     teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    onSetTables: PropTypes.func.isRequired,
 };
 

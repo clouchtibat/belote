@@ -109,6 +109,16 @@ export default class AppComponent extends Component {
     }
 
     @autobind
+    setTables(tables) {
+        console.log('set tables');
+        console.log(tables);
+        this.setState({
+            ...this.state,
+            tables,
+        });
+    }
+
+    @autobind
     toggleStay(index) {
         const teams = this.state.teams.slice();
         teams[index] = {
@@ -131,36 +141,21 @@ export default class AppComponent extends Component {
     }
 
     @autobind
-    createArray() {
-        console.log('create array');
-
-        console.log(this.state);
-        console.log(JSON.stringify(this.state, 0, 4));
-
-        this.setState({
-            ...this.state,
-            table: new Array(this.state.teamsNumber).fill({
-                test: 'test',
-            }),
-        });
-    }
-
-    @autobind
     reset() {
         if (confirm('Réinitialiser partie?')) { //eslint-disable-line
             this.setState({
                 type: undefined,
                 teamsNumber: undefined,
                 teams: undefined,
-                table: undefined,
+                tables: undefined,
             });
         }
     }
 
     render() {
-        const { setTeamsNumber, toggleStay, createArray,
-            setTableTurn, setWon, setLose, toggleSort, reset, setType } = this;
-        const { teams, table, sortedByScore, type } = this.state;
+        const { setTeamsNumber,
+            setTableTurn, setWon, setLose, toggleSort, reset, setType, setTables } = this;
+        const { teams, tables, sortedByScore, type } = this.state;
 
         console.log('render');
         console.log(teams);
@@ -170,23 +165,6 @@ export default class AppComponent extends Component {
             sortedTeams.sort((a, b) => getTotal(a, type) - getTotal(b, type));
             sortedTeams.reverse();
         }
-
-        /*
-
-                                        <h1>Choisir les équipes qui ne vont pas changer de table:</h1>
-                                <div className="teams">
-                                    {teams.map((team, index) => (
-                                        <button
-                                            className={classNames('button', { selected: team.isStaying })}
-                                            key={team.id}
-                                            onClick={() => { toggleStay(index); }}
-                                        >{index + 1}
-                                        </button>
-                                    ))}
-                                </div>
-                                <button className="button generate" onClick={createArray}>Générer tableau</button>
-
-        */
 
         return (
             <div className="app">
@@ -203,12 +181,10 @@ export default class AppComponent extends Component {
                         {!teams && (
                             <TeamsNumber onSetTeamsNumber={setTeamsNumber} />
                         )}
-                        {(teams && !table) && (
-                            <Centerer className="teams-settings">
-                                <TableSorter teams={teams} />
-                            </Centerer>
+                        {(teams && !tables) && (
+                            <TableSorter teams={teams} onSetTables={setTables} />
                         )}
-                        {table && (
+                        {tables && (
                             <div className="score-table">
                                 <button
                                     className={classNames('button sort-rank', { selected: sortedByScore })}

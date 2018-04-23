@@ -31,6 +31,27 @@
         }
     }
 
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+
+        td, th {
+            text-align: center;
+            border: 1px solid lightblue;
+            padding: 5px;
+            border-collapse: collapse;
+        }
+
+        td {
+            height: 35px;
+            font-size: 20px;
+        }
+
+        th {
+            padding: 10px 5px;
+        }
+    }
+
     .reset {
         position: absolute;
         left: 10px;
@@ -67,28 +88,19 @@
         }
     }
 
-    .teams-settings {
-        height: calc(100% - 40px);
+    .table-sorter {
+  
+        .table {
+            width: calc(100% - 40px);
+            margin: 0 20px;
 
-        .teams {
-            padding: 20px;
-            width: 50%;
-            display: inline-block;
-
-            .button {
-                width: 35px;
-                height: 35px;
-                margin: 0 10px 10px 0;
+            .reverse {
+                float: right;
+                font-size: 20px;
+                padding: 5px;
             }
         }
 
-        .generate {
-            display: block;
-            margin: 0 auto;
-            height: 45px;
-            width: 50%;
-            font-size: 20px;
-        }
     }
 
     .score-table  {
@@ -103,14 +115,8 @@
         }
 
         .table {
-            width: 100%;
-            border-collapse: collapse;
 
             td, th {
-                text-align: center;
-                border: 1px solid lightblue;
-                padding: 5px;
-                border-collapse: collapse;
 
                 &.table-turn {
                     padding: 0;
@@ -154,14 +160,6 @@
                 }
             }
 
-            td {
-                height: 35px;
-                font-size: 20px;
-            }
-
-            th {
-                padding: 10px 5px;
-            }
         }
     }
 
