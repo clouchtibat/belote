@@ -11,16 +11,13 @@ export function createTables(teams) {
     for (let i = 0; i < length; i++) {
         const [team1] = teamPicker.splice(Math.floor(Math.random() * teamPicker.length), 1);
         const [team2] = teamPicker.splice(Math.floor(Math.random() * teamPicker.length), 1);
-
-        console.log('teams');
-        console.log(team1);
-        console.log(team2);
-        console.log(teamPicker);
-
-        tables.push({ id: `t${i}`, name: i + 1, rounds: [[team1, team2]] });
+        tables.push({ id: `table${i}`, name: `Table ${i + 1}`, rounds: [[team1, team2]] });
     }
 
-    return tables;
+    console.log('team remaining');
+    console.log(teamPicker);
+
+    return { tables, remainingTeam: teamPicker[0] };
 }
 
 export default class TableSorter extends Component {
@@ -32,9 +29,11 @@ export default class TableSorter extends Component {
 
     componentWillMount() {
         const { teams } = this.props;
+        const { tables, remainingTeam } = createTables(teams);
         this.setState({
             ...this.state,
-            tables: createTables(teams),
+            tables,
+            remainingTeam,
         });
     }
 
@@ -59,9 +58,42 @@ export default class TableSorter extends Component {
         });
     }
 
-    render() {
+    @autobind
+    generateRounds() {
+        console.log('generate rounds');
+        const { tables, remainingTeam } = this.state;
         const { teams } = this.props;
-        const { reverse } = this;
+        const stay = tables.map(table => table.rounds[0][0]);
+        let move = tables.map(table => table.rounds[0][1]);
+        console.log(teams.length % tables.length);
+        if (remainingTeam) {
+            move.unshift(remainingTeam);
+        }
+        console.log(stay);
+        console.log(move);
+        let tmp = tables;
+        const map = (item, index) => [item, move[index]];
+        for (let i = 1; i < 4; i++) {
+            const rounds = stay.map(map);
+            console.log('rounds');
+            console.log(rounds);
+            tmp = tmp.map((table, tableIndex) => ({
+                ...table,
+                rounds: [...table.rounds, rounds[tableIndex]],
+            }));
+            move = [move[move.length - 1], ...move.slice(0, move.length - 1)];
+            console.log('move');
+            console.log(move);
+        }
+        console.log(tmp);
+        this.setState({
+            ...this.state,
+            tables: tmp,
+        });
+    }
+
+    render() {
+        const { reverse, generateRounds } = this;
         const { tables } = this.state;
         const title = 'Tirage au sort';
 
@@ -77,20 +109,32 @@ export default class TableSorter extends Component {
                         {tables.map(table => (
                             <tr key={table.id}>
                                 <td>{table.name}</td>
-                                <td>
-                                    {`${table.rounds[0][0].id} / ${table.rounds[0][1].id}`}
-                                    <button data-id={table.id} onClick={reverse}>reverse</button>
-                                </td>
+                                {table.rounds.map((round, index) => (
+                                    <td>
+                                        {`${round[0].id} / ${round[1].id}`}
+                                        {!index && (
+                                            <button
+                                                className="button reverse"
+                                                data-id={table.id}
+                                                onClick={reverse}
+                                            >
+                                                <i className="ti-control-shuffle" />
+                                            </button>
+                                        )}
+                                    </td>
+                                ))}
+
                             </tr>
                         ))}
                     </tbody>
                 </table>
+                <button className="button" onClick={generateRounds}>Créer les parties</button>
             </Centerer>
         );
     }
 }
 
 TableSorter.propTypes = {
-    onSetTeamsNumber: PropTypes.func.isRequired,
+    teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 

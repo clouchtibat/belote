@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 
+import './themify-icons.css';
 import './index.css';
 
 // if (process.env.NODE_ENV !== 'production') {
