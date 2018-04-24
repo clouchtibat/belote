@@ -69,13 +69,14 @@ export default class TableSorter extends Component {
         let move = tables.map(table => table.rounds[0][1]);
         console.log(teams.length % tables.length);
         if (remainingTeam) {
-            move.unshift(remainingTeam);
+            move.push(remainingTeam);
         }
         console.log(stay);
         console.log(move);
         let tmp = tables;
         const map = (item, index) => [item, move[index]];
         for (let i = 1; i < 4; i++) {
+            move = [move[move.length - 1], ...move.slice(0, move.length - 1)];
             const rounds = stay.map(map);
             console.log('rounds');
             console.log(rounds);
@@ -83,7 +84,7 @@ export default class TableSorter extends Component {
                 ...table,
                 rounds: [...table.rounds, rounds[tableIndex]],
             }));
-            move = [move[move.length - 1], ...move.slice(0, move.length - 1)];
+
             console.log('move');
             console.log(move);
         }
