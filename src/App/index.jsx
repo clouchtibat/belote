@@ -15,7 +15,7 @@ export function getWonSets(team) {
 }
 
 export function getTotal(team, type) {
-    return team.tableTurn + (getWonSets(team) * (type === 'belotte' ? 1000 : 100));
+    return team.tableTurn + (getWonSets(team) * (type === 'belote' ? 1000 : 100));
 }
 
 export default class AppComponent extends Component {
@@ -172,7 +172,7 @@ export default class AppComponent extends Component {
                 <button className="button reset" onClick={reset}>Réinitialiser</button>
                 {!type && (
                     <Centerer className="choose-type">
-                        <button className="button" data-type="belotte" onClick={setType}>Belotte</button>
+                        <button className="button" data-type="belote" onClick={setType}>Belote</button>
                         <button className="button" data-type="manille" onClick={setType}>Manille</button>
                     </Centerer>
                 )}
