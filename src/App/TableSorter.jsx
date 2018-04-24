@@ -118,7 +118,11 @@ export default class TableSorter extends Component {
 
         return (
             <Centerer className="table-sorter">
-                <h1>{title} <button className="button" onClick={redoTables}>Refaire le tirage</button></h1>
+                <h1>{title}</h1>
+                <div className="actions">
+                    <button className="button" onClick={redoTables}>Refaire le tirage</button>
+                    <button className="button" onClick={generateRounds}>Créer les parties</button>
+                </div>
                 <table className="table">
                     <thead>
                         <tr>
@@ -150,8 +154,8 @@ export default class TableSorter extends Component {
                         ))}
                     </tbody>
                 </table>
-                <button className="button" onClick={generateRounds}>Créer les parties</button>
-                <button className="button" onClick={setTables}>Terminer</button>
+
+                <button className="button end" onClick={setTables}>Terminer</button>
             </Centerer>
         );
     }
