@@ -52,6 +52,28 @@
         }
     }
 
+    .tabs {
+        .header {
+            .handle {
+                display: inline-block;
+                padding: 5px;
+                width: 250px;
+                font-size: 20px;
+            }
+        }
+        .body {
+            .tab {
+                display: none;
+                border: 1px solid lightblue;
+                padding: 20px 0 0 0;
+
+                &.visible {
+                    display: block;
+                }
+            }
+        }
+    }
+
     .reset {
         position: absolute;
         left: 10px;
@@ -161,6 +183,37 @@
             }
 
         }
+    }
+
+    @media print {
+
+        .button {
+            display: none !important;
+        }
+
+        .tabs {
+            .header {
+                display: none;
+            }
+
+            .tab {
+                padding: 0 !important;
+            }
+        }
+
+        .set.won {
+            &:after {
+                content: 'Gagné'
+            }
+        }
+
+        .set.lost {
+            &:after {
+                content: 'Perdu'
+            }
+        }
+
+
     }
 
 

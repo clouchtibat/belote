@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import TeamsNumber from './TeamsNumber';
 import TableSorter from './TableSorter';
 import Centerer from './Centerer';
+import Tabs from './Tabs';
 
 import './app.scss';
 
@@ -186,57 +187,84 @@ export default class AppComponent extends Component {
                         )}
                         {tables && (
                             <div className="score-table">
-                                <button
-                                    className={classNames('button sort-rank', { selected: sortedByScore })}
-                                    onClick={toggleSort}
-                                >Trier par score
-                                </button>
-                                <table className="table">
-                                    <thead>
-                                        <tr><th>Equipe</th><th>Tour de table</th>
-                                            <th>Partie 1</th>
-                                            <th>Partie 2</th>
-                                            <th>Partie 3</th>
-                                            <th>Partie 4</th>
-                                            <th>Parties gagnées</th>
-                                            <th>Total points</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {sortedTeams.map(team => (
-                                            <tr key={team.id}>
-                                                <td>{team.name}</td>
-                                                <td className="table-turn"><input type="text" data-id={team.id} value={team.tableTurn} onChange={setTableTurn} /></td>
-                                                {team.sets.map((set, index) => {
-                                                    const key = `${team.id}_${index}`;
-                                                    const isWon = set === 'w';
-                                                    const isLost = set === 'l';
-                                                    return (
-                                                        <td key={key} className={classNames('set', { won: isWon, lost: isLost })}>
-                                                            <button
-                                                                className="button status"
-                                                                data-id={team.id}
-                                                                data-set={index}
-                                                                onClick={setWon}
-                                                            >Gagné
-                                                            </button>
-                                                            <button
-                                                                className="button status"
-                                                                data-id={team.id}
-                                                                data-set={index}
-                                                                onClick={setLose}
-                                                            >Perdu
-                                                            </button>
-                                                        </td>
-                                                    );
-                                                })}
-                                                <td>{getWonSets(team)}</td>
-                                                <td>{getTotal(team, type)}</td>
+                                <Tabs>
+                                    <table className="table" id="Tables">
+                                        <thead>
+                                            <tr>
+                                                <td>Table</td>
+                                                <td>Partie 1</td>
+                                                <td>Partie 2</td>
+                                                <td>Partie 3</td>
+                                                <td>Partie 4</td>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-
+                                        </thead>
+                                        <tbody>
+                                            {tables.map(table => (
+                                                <tr key={table.id}>
+                                                    <td>{table.name}</td>
+                                                    {table.rounds.map(round => (
+                                                        <td>
+                                                            {`${round[0].name} / ${round[1].name}`}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <div id="Equipes">
+                                        <button
+                                            className={classNames('button sort-rank', { selected: sortedByScore })}
+                                            onClick={toggleSort}
+                                        >
+                                        Trier par score
+                                        </button>
+                                        <table className="table" id="Equipes">
+                                            <thead>
+                                                <tr><th>Equipe</th><th>Tour de table</th>
+                                                    <th>Partie 1</th>
+                                                    <th>Partie 2</th>
+                                                    <th>Partie 3</th>
+                                                    <th>Partie 4</th>
+                                                    <th>Parties gagnées</th>
+                                                    <th>Total points</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {sortedTeams.map(team => (
+                                                    <tr key={team.id}>
+                                                        <td>{team.name}</td>
+                                                        <td className="table-turn"><input type="text" data-id={team.id} value={team.tableTurn} onChange={setTableTurn} /></td>
+                                                        {team.sets.map((set, index) => {
+                                                            const key = `${team.id}_${index}`;
+                                                            const isWon = set === 'w';
+                                                            const isLost = set === 'l';
+                                                            return (
+                                                                <td key={key} className={classNames('set', { won: isWon, lost: isLost })}>
+                                                                    <button
+                                                                        className="button status"
+                                                                        data-id={team.id}
+                                                                        data-set={index}
+                                                                        onClick={setWon}
+                                                                    >Gagné
+                                                                    </button>
+                                                                    <button
+                                                                        className="button status"
+                                                                        data-id={team.id}
+                                                                        data-set={index}
+                                                                        onClick={setLose}
+                                                                    >Perdu
+                                                                    </button>
+                                                                </td>
+                                                            );
+                                                        })}
+                                                        <td>{getWonSets(team)}</td>
+                                                        <td>{getTotal(team, type)}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </Tabs>
                             </div>
                         )}
                     </div>

@@ -39,6 +39,14 @@ export default class TableSorter extends Component {
         });
     }
 
+
+    @autobind
+    setTables() {
+        console.log('set tables');
+        const { onSetTables } = this.props;
+        onSetTables(this.state.tables);
+    }
+
     @autobind
     reverse({ target: { dataset: { id } } }) {
         console.log(this);
@@ -98,13 +106,6 @@ export default class TableSorter extends Component {
         });
     }
 
-    @autobind
-    setTables() {
-        console.log('set tables');
-        const { onSetTables } = this.props;
-        onSetTables(this.state.tables);
-    }
-
     render() {
         const { reverse, generateRounds, redoTables, setTables } = this;
         const { tables } = this.state;
@@ -133,7 +134,7 @@ export default class TableSorter extends Component {
                                 <td>{table.name}</td>
                                 {table.rounds.map((round, index) => (
                                     <td>
-                                        {`${round[0].id} / ${round[1].id}`}
+                                        {`${round[0].name} / ${round[1].name}`}
                                         {!index && (
                                             <i
                                                 className="button reverse ti-control-shuffle"
