@@ -14,9 +14,6 @@ export function createTables(teams) {
         tables.push({ id: `table${i}`, name: `Table ${i + 1}`, rounds: [[team1, team2]] });
     }
 
-    console.log('team remaining');
-    console.log(teamPicker);
-
     return { tables, remainingTeam: teamPicker[0] };
 }
 
@@ -33,24 +30,25 @@ export default class TableSorter extends Component {
 
     componentWillReceiveProps(nextProps) {
         const { teams } = nextProps;
+        const { tables, remainingTeam } = createTables(teams);
         this.setState({
             ...this.state,
-            tables: createTables(teams),
+            tables,
+            remainingTeam,
         });
     }
 
 
     @autobind
     setTables() {
-        console.log('set tables');
         const { onSetTables } = this.props;
-        onSetTables(this.state.tables);
+        const { tables, remainingTeam, remaining } = this.state;
+        const remains = remainingTeam ? [remainingTeam, ...remaining] : undefined;
+        onSetTables(tables, remains);
     }
 
     @autobind
     reverse({ target: { dataset: { id } } }) {
-        console.log(this);
-        console.log('todo reverse table');
         this.setState({
             ...this.state,
             tables: this.state.tables.map(table => (table.id === id ? {
@@ -62,42 +60,34 @@ export default class TableSorter extends Component {
 
     @autobind
     generateRounds() {
-        console.log('generate rounds');
         const { tables, remainingTeam } = this.state;
-        const { teams } = this.props;
         const stay = tables.map(table => table.rounds[0][0]);
         let move = tables.map(table => table.rounds[0][1]);
-        console.log(teams.length % tables.length);
         if (remainingTeam) {
             move.push(remainingTeam);
         }
-        console.log(stay);
-        console.log(move);
         let tmp = tables;
         const map = (item, index) => [item, move[index]];
+        const remaining = [];
         for (let i = 1; i < 4; i++) {
             move = [move[move.length - 1], ...move.slice(0, move.length - 1)];
+            remaining.push(move[move.length - 1]);
             const rounds = stay.map(map);
-            console.log('rounds');
-            console.log(rounds);
             tmp = tmp.map((table, tableIndex) => ({
                 ...table,
                 rounds: [...table.rounds, rounds[tableIndex]],
             }));
-
-            console.log('move');
-            console.log(move);
         }
-        console.log(tmp);
+
         this.setState({
             ...this.state,
             tables: tmp,
+            remaining,
         });
     }
 
     @autobind
     redoTables() {
-        console.log('rddo tables');
         const { teams } = this.props;
         const { tables, remainingTeam } = createTables(teams);
         this.setState({
@@ -109,12 +99,8 @@ export default class TableSorter extends Component {
 
     render() {
         const { reverse, generateRounds, redoTables, setTables } = this;
-        const { tables } = this.state;
+        const { tables, remainingTeam, remaining } = this.state;
         const title = 'Tirage au sort';
-
-
-        console.log('tables');
-        console.log(tables);
 
         return (
             <Centerer className="table-sorter">
@@ -126,11 +112,11 @@ export default class TableSorter extends Component {
                 <table className="table">
                     <thead>
                         <tr>
-                            <td>Table</td>
-                            <td>Partie 1</td>
-                            <td>Partie 2</td>
-                            <td>Partie 3</td>
-                            <td>Partie 4</td>
+                            <th>Table</th>
+                            <th>Partie 1</th>
+                            <th>Partie 2</th>
+                            <th>Partie 3</th>
+                            <th>Partie 4</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,9 +135,17 @@ export default class TableSorter extends Component {
                                         )}
                                     </td>
                                 ))}
-
                             </tr>
                         ))}
+                        {!!remainingTeam && (
+                            <tr className="hat">
+                                <td className="hat-title">Chapeau</td>
+                                <td>{remainingTeam.name}</td>
+                                {!!remaining && remaining.map(remain => (
+                                    <td>{remain.name}</td>
+                                ))}
+                            </tr>
+                        )}
                     </tbody>
                 </table>
 

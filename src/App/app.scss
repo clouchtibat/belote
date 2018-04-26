@@ -1,12 +1,10 @@
 .app {
     width: 100%;
     height: 100%;
-
     .centerer {
         display: table;
         width: 100%;
         height: 100%;
-
         .centered {
             width: 100%;
             height: 100%;
@@ -15,43 +13,52 @@
             text-align: center;
         }
     }
-
     .button {
         background: white;
         border: 1px solid grey;
         cursor: pointer;
         transition: all .2s;
-
         &:hover {
             background: lighten(lightblue, 15);
         }
-
         &.selected {
             background: yellowgreen;
         }
     }
-
     .table {
         width: 100%;
         border-collapse: collapse;
-
-        td, th {
+        tr:hover {
+            td {
+                background: lighten(lightblue, 17);
+            }
+        }
+        td,
+        th {
             text-align: center;
             border: 1px solid lightblue;
             padding: 5px;
             border-collapse: collapse;
         }
-
         td {
             height: 35px;
             font-size: 20px;
         }
-
         th {
             padding: 10px 5px;
+            font-weight: bold;
+        }
+        tr {
+            &.hat {
+                td {
+                    color: darken(darkgrey, 15);
+                }
+                .hat-title {
+                    font-weight: bold;
+                }
+            }
         }
     }
-
     .tabs {
         .header {
             .handle {
@@ -66,35 +73,30 @@
                 display: none;
                 border: 1px solid lightblue;
                 padding: 20px 0 0 0;
-
                 &.visible {
                     display: block;
                 }
             }
         }
     }
-
     .reset {
         position: absolute;
         left: 10px;
         top: 10px;
     }
-
     .title {
         text-transform: capitalize;
         width: 100%;
         text-align: center;
     }
-
     .choose-type {
         .button {
             height: 41px;
             font-size: 25px;
             padding: 0 25px;
-            margin:0 20px;
+            margin: 0 20px;
         }
     }
-
     .teams-number {
         input[type=number] {
             height: 35px;
@@ -102,52 +104,41 @@
             margin: 0 15px 0 0;
             width: 60px;
         }
-
         .button {
             height: 41px;
             font-size: 25px;
             padding: 0 25px;
         }
     }
-
     .table-sorter {
-
         .actions {
             padding: 0 0 10px;
-            
-            .button  {
+            .button {
                 font-size: 20px;
                 padding: 10px 20px;
-
                 &:first-child {
                     margin: 0 20px 0 0;
                 }
             }
         }
-  
         .table {
             width: calc(100% - 40px);
             margin: 0 20px;
-
             .reverse {
                 float: right;
                 font-size: 20px;
                 padding: 5px;
             }
         }
-
-        .end  {
+        .end {
             width: 90%;
             font-size: 25px;
             padding: 10px;
             margin: 30px 0;
         }
-
     }
-
-    .score-table  {
+    .score-table {
         padding: 0 20px 20px;
-
         .sort-rank {
             width: 30%;
             display: block;
@@ -155,45 +146,37 @@
             height: 35px;
             font-size: 20px;
         }
-
         .table {
-
-            td, th {
-
+            td,
+            th {
                 &.table-turn {
                     padding: 0;
-
                     input {
                         width: calc(100% - 12px);
                         height: 45px;
                         border: 0;
                         padding: 0 5px;
                         font-size: 20px;
+                        background: none;
                     }
                 }
-
                 &.set {
-                    font-size:12px;
-
+                    font-size: 12px;
                     &.won {
                         background: yellowgreen;
                     }
-
                     &.lost {
                         background: tomato;
                     }
-
                     .button {
                         transition: all .2s;
                         opacity: 0;
                         font-size: 12px;
                         padding: 5px;
-
                         &:first-child {
                             margin: 0 5px 0 0;
                         }
                     }
-
                     &:hover {
                         button {
                             opacity: 1;
@@ -201,40 +184,29 @@
                     }
                 }
             }
-
         }
     }
-
     @media print {
-
         .button {
             display: none !important;
         }
-
         .tabs {
             .header {
                 display: none;
             }
-
             .tab {
                 padding: 0 !important;
             }
         }
-
         .set.won {
             &:after {
                 content: 'Gagné'
             }
         }
-
         .set.lost {
             &:after {
                 content: 'Perdu'
             }
         }
-
-
     }
-
-
 }

@@ -18,21 +18,22 @@ export function getTotal(team, type) {
     return team.tableTurn + (getWonSets(team) * (type === 'belote' ? 1000 : 100));
 }
 
+export function setTitle(title) {
+    document.title = title.charAt(0).toUpperCase() + title.slice(1);
+}
+
 export default class AppComponent extends Component {
     constructor() {
         super();
 
         const tmp = sessionStorage.getItem('state');
-        console.log('component constructor');
-        console.log(tmp);
 
         this.state = JSON.parse(tmp) || {};
+        setTitle(this.state.type || 'Belote');
 
         this.originalSetState = this.setState;
 
         this.setState = (state) => {
-            console.log('set state');
-            console.log(state);
             this.originalSetState(state);
             sessionStorage.setItem('state', JSON.stringify(state));
         };
@@ -53,10 +54,6 @@ export default class AppComponent extends Component {
 
     @autobind
     setTableTurn({ target: { dataset: { id }, value } }) {
-        console.log('set table turn');
-        console.log(id);
-        console.log(value);
-
         this.setState({
             ...this.state,
             teams: this.state.teams.map(team => (team.id === id ? {
@@ -68,28 +65,16 @@ export default class AppComponent extends Component {
 
     @autobind
     setWon({ target: { dataset: { id, set } } }) {
-        console.log('set won');
-        console.log(id);
-        console.log(set);
-
         this.setSet(id, set, 'w');
     }
 
     @autobind
     setLose({ target: { dataset: { id, set } } }) {
-        console.log('set lose');
-        console.log(id);
-        console.log(set);
-
         this.setSet(id, set, 'l');
     }
 
     @autobind
     setSet(id, set, value) {
-        console.log('set won');
-        console.log(id);
-        console.log(set);
-
         this.setState({
             ...this.state,
             teams: this.state.teams.map(team => (team.id === id ? {
@@ -101,21 +86,19 @@ export default class AppComponent extends Component {
 
     @autobind
     setType({ target: { dataset: { type } } }) {
-        console.log('set type');
-        console.log(type);
         this.setState({
             ...this.state,
             type,
         });
+        setTitle(type);
     }
 
     @autobind
-    setTables(tables) {
-        console.log('set tables');
-        console.log(tables);
+    setTables(tables, remaining) {
         this.setState({
             ...this.state,
             tables,
+            remaining,
         });
     }
 
@@ -156,12 +139,9 @@ export default class AppComponent extends Component {
     render() {
         const { setTeamsNumber,
             setTableTurn, setWon, setLose, toggleSort, reset, setType, setTables } = this;
-        const { teams, tables, sortedByScore, type } = this.state;
-
-        console.log('render');
-        console.log(teams);
-
+        const { teams, tables, sortedByScore, type, remaining } = this.state;
         const sortedTeams = (teams || []).slice();
+
         if (sortedByScore) {
             sortedTeams.sort((a, b) => getTotal(a, type) - getTotal(b, type));
             sortedTeams.reverse();
@@ -191,11 +171,11 @@ export default class AppComponent extends Component {
                                     <table className="table" id="Tables">
                                         <thead>
                                             <tr>
-                                                <td>Table</td>
-                                                <td>Partie 1</td>
-                                                <td>Partie 2</td>
-                                                <td>Partie 3</td>
-                                                <td>Partie 4</td>
+                                                <th>Table</th>
+                                                <th>Partie 1</th>
+                                                <th>Partie 2</th>
+                                                <th>Partie 3</th>
+                                                <th>Partie 4</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -203,12 +183,20 @@ export default class AppComponent extends Component {
                                                 <tr key={table.id}>
                                                     <td>{table.name}</td>
                                                     {table.rounds.map(round => (
-                                                        <td>
+                                                        <td key={`r${round[0].id}${round[1].id}`}>
                                                             {`${round[0].name} / ${round[1].name}`}
                                                         </td>
                                                     ))}
                                                 </tr>
                                             ))}
+                                            {!!remaining && (
+                                                <tr className="hat">
+                                                    <td className="hat-title">Chapeau</td>
+                                                    {remaining.map(remain => (
+                                                        <td key={remain.id}>{remain.name}</td>
+                                                    ))}
+                                                </tr>
+                                            )}
                                         </tbody>
                                     </table>
                                     <div id="Equipes">

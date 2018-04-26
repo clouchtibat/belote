@@ -25,9 +25,6 @@ export default class Tabs extends Component {
         const { children } = this.props;
         const { currentId } = this.state;
 
-        console.log('tabs render');
-        console.log(currentId);
-
         return (
             <div className="tabs">
                 <div className="header">
