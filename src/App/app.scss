@@ -98,16 +98,25 @@
         }
     }
     .teams-number {
-        input[type=number] {
-            height: 35px;
-            font-size: 25px;
-            margin: 0 15px 0 0;
-            width: 60px;
+        .line {
+            padding: 20px 0;
+            label {
+                font-weight: bold;
+                margin: 0 20px 0;
+                font-size: 25px;
+            }
+            input[type=number] {
+                height: 35px;
+                font-size: 25px;
+                margin: 0 15px 0 0;
+                width: 60px;
+            }
         }
         .button {
             height: 41px;
             font-size: 25px;
             padding: 0 25px;
+            margin: 30px 0 0;
         }
     }
     .table-sorter {

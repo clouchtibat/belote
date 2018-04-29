@@ -3,6 +3,7 @@ import autobind from 'autobind-decorator';
 import PropTypes from 'prop-types';
 
 import Centerer from './Centerer';
+import partiesHeader from './PartiesHeader';
 
 export function createTables(teams) {
     const tables = [];
@@ -61,6 +62,7 @@ export default class TableSorter extends Component {
     @autobind
     generateRounds() {
         const { tables, remainingTeam } = this.state;
+        const { setsNumber } = this.props;
         const stay = tables.map(table => table.rounds[0][0]);
         let move = tables.map(table => table.rounds[0][1]);
         if (remainingTeam) {
@@ -69,7 +71,7 @@ export default class TableSorter extends Component {
         let tmp = tables;
         const map = (item, index) => [item, move[index]];
         const remaining = [];
-        for (let i = 1; i < 4; i++) {
+        for (let i = 1; i < setsNumber; i++) {
             move = [move[move.length - 1], ...move.slice(0, move.length - 1)];
             remaining.push(move[move.length - 1]);
             const rounds = stay.map(map);
@@ -100,6 +102,7 @@ export default class TableSorter extends Component {
     render() {
         const { reverse, generateRounds, redoTables, setTables } = this;
         const { tables, remainingTeam, remaining } = this.state;
+        const { setsNumber } = this.props;
         const title = 'Tirage au sort';
 
         return (
@@ -113,10 +116,7 @@ export default class TableSorter extends Component {
                     <thead>
                         <tr>
                             <th>Table</th>
-                            <th>Partie 1</th>
-                            <th>Partie 2</th>
-                            <th>Partie 3</th>
-                            <th>Partie 4</th>
+                            {partiesHeader(setsNumber)}
                         </tr>
                     </thead>
                     <tbody>
@@ -158,5 +158,6 @@ export default class TableSorter extends Component {
 TableSorter.propTypes = {
     teams: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     onSetTables: PropTypes.func.isRequired,
+    setsNumber: PropTypes.number.isRequired,
 };
 

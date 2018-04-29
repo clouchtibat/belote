@@ -20,28 +20,48 @@ export default class TeamsNumber extends Component {
     }
 
     @autobind
+    setSets(e) {
+        this.setState({
+            ...this.state,
+            setsNumber: parseInt(e.target.value, 10),
+        });
+    }
+
+    @autobind
     formSubmit(e) {
         e.preventDefault();
-        this.props.onSetTeamsNumber(this.state.teamsNumber);
+        this.props.onSetTeamsNumber(this.state.teamsNumber, this.state.setsNumber);
     }
 
     render() {
-        const { formSubmit, setTeams } = this;
-        const { teamsNumber } = this.state;
-        const title = "Choisissez le nombre d'équipes";
+        const { formSubmit, setTeams, setSets } = this;
+        const { teamsNumber, setsNumber } = this.state;
 
         return (
             <Centerer className="teams-number">
-                <h1>{title}</h1>
                 <form onSubmit={formSubmit}>
-                    <input
-                        type="number"
-                        name="teams"
-                        min="0"
-                        max="100"
-                        value={teamsNumber}
-                        onChange={setTeams}
-                    />
+                    <div className="line">
+                        <label htmlFor="teams">Nombre d&#39;équipes:</label>
+                        <input
+                            type="number"
+                            name="teams"
+                            min="2"
+                            max="500"
+                            value={teamsNumber}
+                            onChange={setTeams}
+                        />
+                    </div>
+                    <div className="line">
+                        <label htmlFor="teams">Nombre de parties:</label>
+                        <input
+                            type="number"
+                            name="sets"
+                            min="1"
+                            max="100"
+                            value={setsNumber}
+                            onChange={setSets}
+                        />
+                    </div>
                     <input type="submit" className="button" />
                 </form>
             </Centerer>

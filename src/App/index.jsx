@@ -5,6 +5,7 @@ import TeamsNumber from './TeamsNumber';
 import TableSorter from './TableSorter';
 import Centerer from './Centerer';
 import Tabs from './Tabs';
+import partiesHeaders from './PartiesHeader';
 
 import './app.scss';
 
@@ -40,15 +41,16 @@ export default class AppComponent extends Component {
     }
 
     @autobind
-    setTeamsNumber(teamsNumber) {
+    setTeamsNumber(teamsNumber, setsNumber) {
         const teams = [];
         for (let i = 0; i < teamsNumber; i++) {
-            teams.push({ id: `t${i}`, name: i + 1, tableTurn: 0, sets: new Array(4).fill('x') });
+            teams.push({ id: `t${i}`, name: i + 1, tableTurn: 0, sets: new Array(setsNumber).fill('x') });
         }
 
         this.setState({
             ...this.state,
             teams,
+            setsNumber,
         });
     }
 
@@ -139,7 +141,7 @@ export default class AppComponent extends Component {
     render() {
         const { setTeamsNumber,
             setTableTurn, setWon, setLose, toggleSort, reset, setType, setTables } = this;
-        const { teams, tables, sortedByScore, type, remaining } = this.state;
+        const { teams, tables, sortedByScore, type, remaining, setsNumber } = this.state;
         const sortedTeams = (teams || []).slice();
 
         if (sortedByScore) {
@@ -163,7 +165,11 @@ export default class AppComponent extends Component {
                             <TeamsNumber onSetTeamsNumber={setTeamsNumber} />
                         )}
                         {(teams && !tables) && (
-                            <TableSorter teams={teams} onSetTables={setTables} />
+                            <TableSorter
+                                teams={teams}
+                                setsNumber={setsNumber}
+                                onSetTables={setTables}
+                            />
                         )}
                         {tables && (
                             <div className="score-table">
@@ -172,10 +178,9 @@ export default class AppComponent extends Component {
                                         <thead>
                                             <tr>
                                                 <th>Table</th>
-                                                <th>Partie 1</th>
-                                                <th>Partie 2</th>
-                                                <th>Partie 3</th>
-                                                <th>Partie 4</th>
+                                                {tables[0].rounds.map((round, index) => (
+                                                    <th>Partie {index + 1}</th>
+                                                ))}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -208,11 +213,10 @@ export default class AppComponent extends Component {
                                         </button>
                                         <table className="table" id="Equipes">
                                             <thead>
-                                                <tr><th>Equipe</th><th>Tour de table</th>
-                                                    <th>Partie 1</th>
-                                                    <th>Partie 2</th>
-                                                    <th>Partie 3</th>
-                                                    <th>Partie 4</th>
+                                                <tr>
+                                                    <th>Equipe</th>
+                                                    <th>Tour de table</th>
+                                                    {partiesHeaders(setsNumber)}
                                                     <th>Parties gagnées</th>
                                                     <th>Total points</th>
                                                 </tr>
