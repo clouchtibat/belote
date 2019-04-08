@@ -5,6 +5,7 @@ import TableSorter from './TableSorter';
 import Centerer from './Centerer';
 import Tabs from './Tabs';
 import partiesHeaders from './PartiesHeader';
+import { version } from 'config';
 
 import './app.scss';
 
@@ -153,6 +154,7 @@ export default class AppComponent extends Component {
 
 		return (
 			<div className="app">
+				<div className="version">{version}</div>
 				<button className="button reset" onClick={reset}>
 					Réinitialiser
 				</button>
