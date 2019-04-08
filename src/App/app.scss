@@ -1,10 +1,18 @@
 .app {
     width: 100%;
     height: 100%;
+
+    .version {
+        position: absolute;
+        right: 5px;
+        top: 5px;
+    }
+
     .centerer {
         display: table;
         width: 100%;
         height: 100%;
+
         .centered {
             width: 100%;
             height: 100%;
@@ -13,26 +21,32 @@
             text-align: center;
         }
     }
+
     .button {
         background: white;
         border: 1px solid grey;
         cursor: pointer;
         transition: all .2s;
+
         &:hover {
             background: lighten(lightblue, 15);
         }
+
         &.selected {
             background: yellowgreen;
         }
     }
+
     .table {
         width: 100%;
         border-collapse: collapse;
+
         tr:hover {
             td {
                 background: lighten(lightblue, 17);
             }
         }
+
         td,
         th {
             text-align: center;
@@ -40,25 +54,30 @@
             padding: 5px;
             border-collapse: collapse;
         }
+
         td {
             height: 35px;
             font-size: 20px;
         }
+
         th {
             padding: 10px 5px;
             font-weight: bold;
         }
+
         tr {
             &.hat {
                 td {
                     color: darken(darkgrey, 15);
                 }
+
                 .hat-title {
                     font-weight: bold;
                 }
             }
         }
     }
+
     .tabs {
         .header {
             .handle {
@@ -68,27 +87,32 @@
                 font-size: 20px;
             }
         }
+
         .body {
             .tab {
                 display: none;
                 border: 1px solid lightblue;
                 padding: 20px 0 0 0;
+
                 &.visible {
                     display: block;
                 }
             }
         }
     }
+
     .reset {
         position: absolute;
         left: 10px;
         top: 10px;
     }
+
     .title {
         text-transform: capitalize;
         width: 100%;
         text-align: center;
     }
+
     .choose-type {
         .button {
             height: 41px;
@@ -97,14 +121,17 @@
             margin: 0 20px;
         }
     }
+
     .teams-number {
         .line {
             padding: 20px 0;
+
             label {
                 font-weight: bold;
                 margin: 0 20px 0;
                 font-size: 25px;
             }
+
             input[type=number] {
                 height: 35px;
                 font-size: 25px;
@@ -112,6 +139,7 @@
                 width: 60px;
             }
         }
+
         .button {
             height: 41px;
             font-size: 25px;
@@ -119,26 +147,32 @@
             margin: 30px 0 0;
         }
     }
+
     .table-sorter {
         .actions {
             padding: 0 0 10px;
+
             .button {
                 font-size: 20px;
                 padding: 10px 20px;
+
                 &:first-child {
                     margin: 0 20px 0 0;
                 }
             }
         }
+
         .table {
             width: calc(100% - 40px);
             margin: 0 20px;
+
             .reverse {
                 float: right;
                 font-size: 20px;
                 padding: 5px;
             }
         }
+
         .end {
             width: 90%;
             font-size: 25px;
@@ -146,8 +180,10 @@
             margin: 30px 0;
         }
     }
+
     .score-table {
         padding: 0 20px 20px;
+
         .sort-rank {
             width: 30%;
             display: block;
@@ -155,11 +191,14 @@
             height: 35px;
             font-size: 20px;
         }
+
         .table {
+
             td,
             th {
                 &.table-turn {
                     padding: 0;
+
                     input {
                         width: calc(100% - 12px);
                         height: 45px;
@@ -169,23 +208,29 @@
                         background: none;
                     }
                 }
+
                 &.set {
                     font-size: 12px;
+
                     &.won {
                         background: yellowgreen;
                     }
+
                     &.lost {
                         background: tomato;
                     }
+
                     .button {
                         transition: all .2s;
                         opacity: 0;
                         font-size: 12px;
                         padding: 5px;
+
                         &:first-child {
                             margin: 0 5px 0 0;
                         }
                     }
+
                     &:hover {
                         button {
                             opacity: 1;
@@ -195,23 +240,28 @@
             }
         }
     }
+
     @media print {
         .button {
             display: none !important;
         }
+
         .tabs {
             .header {
                 display: none;
             }
+
             .tab {
                 padding: 0 !important;
             }
         }
+
         .set.won {
             &:after {
                 content: 'Gagné'
             }
         }
+
         .set.lost {
             &:after {
                 content: 'Perdu'

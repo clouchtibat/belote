@@ -1,0 +1,87 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": ["eslint:recommended", "react-app"],
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "plugins": ["react", "react-hooks"],
+    "rules": {
+        "max-len": [
+            2,
+            {
+                "code": 120,
+                "ignoreComments": true
+            }
+        ],
+        "class-methods-use-this": 0,
+        "object-shorthand": 2,
+        "no-unused-vars": 2,
+        "prefer-arrow-callback": 2,
+        "prefer-const": 2,
+        "prefer-destructuring": 2,
+        "prefer-spread": 2,
+        "import/first": 2,
+        "function-paren-newline": [
+            0,
+            "multiline"
+        ],
+        "object-property-newline": [
+            2,
+            {
+                "allowAllPropertiesOnSameLine": true
+            }
+        ],
+        "import/prefer-default-export": 2,
+        "no-use-before-define": 2,
+        "react/require-default-props": 2,
+        "react/prefer-stateless-function": 2,
+        "react/react-in-jsx-scope": 2,
+        "react/jsx-curly-brace-presence": [
+            2,
+            {
+                "props": "never",
+                "children": "never"
+            }
+        ],
+        "prefer-template": 2,
+        "react/jsx-boolean-value": 2,
+        "import/newline-after-import": 2,
+        "react/no-unused-state": 2,
+        "react/prop-types": 2,
+        "react/no-unused-prop-types": 2,
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "arrow-body-style": [
+            2,
+            "as-needed"
+        ],
+        "comma-dangle": [
+            2,
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "always-multiline",
+                "exports": "always-multiline",
+                "functions": "ignore"
+            }
+        ],
+        "no-console": [
+            2,
+            {
+                "allow": [
+                    "warn",
+                    "error"
+                ]
+            }
+        ]
+    }
+}
