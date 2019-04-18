@@ -37,6 +37,13 @@ export default class AppComponent extends Component {
 		this.setState = state => {
 			this.originalSetState(state);
 			sessionStorage.setItem('state', JSON.stringify(state));
+			console.log('set state');
+			console.log(state.type);
+			if (state.type) {
+				const save = JSON.parse(localStorage.getItem('save')) || {};
+				save[state.type] = state;
+				localStorage.setItem('save', JSON.stringify(save));
+			}
 		};
 	}
 
